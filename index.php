@@ -13,7 +13,8 @@ if (!isset($_SESSION["loggedIn"])) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!--    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <link href="css/toastr.min.css" rel="stylesheet"/>
@@ -21,43 +22,40 @@ if (!isset($_SESSION["loggedIn"])) {
         .container {
             height: 80vh;
         }
-
-        .site-header {
-            border-bottom: 1px solid #ccc;
-            padding: .5em 1em;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .site-identity h1 {
-            font-size: 1.5em;
-            margin: .6em 0;
-            display: inline-block;
-        }
-
-        .site-navigation ul,
-        .site-navigation li {
-            margin: 0;
-            padding: 0;
-        }
-
-        .site-navigation li {
-            display: inline-block;
-            margin: 1.4em 1em 1em 1em;
-        }
     </style>
 </head>
 <body>
-<header class="site-header">
-    <div class="site-identity">
-        <h1><a href="#">Attendance Management</a></h1>
+<nav class="navbar navbar-fixed-top navbar-toggleable-sm navbar-inverse bg-primary mb-3">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="flex-row d-flex">
+        <a class="navbar-brand mb-1" href="#">Attendance Management</a>
+        <button type="button" class="hidden-md-up navbar-toggler" data-toggle="offcanvas"
+                title="Toggle responsive left sidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
-    <nav class="site-navigation">
-        <ul class="nav">
-            <li><a href="logout.php">Logout</a></li>
+    <div class="navbar-collapse collapse" id="collapsingNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">Home</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#myAlert" data-toggle="collapse">Wow</a>
+            </li>
         </ul>
-    </nav>
-</header>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="container align-content-center d-flex justify-content-center align-items-center">
     <b>Logged in Successfully.....</b>
 </div>
