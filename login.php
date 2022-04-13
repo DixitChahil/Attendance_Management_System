@@ -276,11 +276,11 @@ if (mysqli_num_rows($result) > 0) {
             email: {
                 required: true,
                 myEmail: true,
-                remote: base_url + "controller/authController.php?name=check_exists_email"
+                remote: "controller/authController.php?name=check_exists_email"
             },
             phone: {
                 required: true,
-                remote: base_url + "controller/authController.php?name=check_exists_mobile"
+                remote: "controller/authController.php?name=check_exists_mobile"
             },
             subjectId: {
                 required: true,

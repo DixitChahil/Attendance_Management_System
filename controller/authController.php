@@ -1,19 +1,19 @@
 <?php
 require_once "database.php";
 session_start();
-echo 'fghgffg';
+
 // Check if email exists for signup
 if (isset($_GET['name']) && $_GET['name'] == 'check_exists_email') {
     $email = $_GET["email"];
-    echo $email;
+
     // Prepare a select statement
     $sql_query = "select * from users where email = '$email'";
     $result = mysqli_query($link, $sql_query);
 
     if (mysqli_num_rows($result) > 0) {
-        echo false;
+        echo json_encode(false);
     } else {
-        echo true;
+        echo json_encode(true);
     }
 }
 // Check if phone exists for signup
@@ -44,7 +44,10 @@ if ($_GET['name'] == 'login') {
             'message' => 'Please enter valid credentials'
         ]);
     } else {
+        $row = mysqli_fetch_assoc($table);
         $_SESSION["loggedIn"] = true;
+        $_SESSION["id"] = $row['id'];
+        $_SESSION["role"] = $row['role'];
         echo json_encode([
             'status' => true,
             'message' => 'Logged in successfully'
@@ -63,12 +66,12 @@ if ($_GET['name'] == 'signup') {
     $hash = base64_encode($password);
     $query = "insert into users (name, subjectId, teacherId, role, email, phone, password) 
             values('$name','$subjectId','$teacherId','t', '$email', '$phone', '$hash')";
-    if ($link->query($query) == FALSE)
+    if ($link->query($query) == FALSE) {
         echo json_encode([
             'status' => false,
             'message' => 'Failed to add user please try again'
         ]);
-    else {
+    }else {
         echo json_encode([
             'status' => true,
             'message' => 'Signed Up Successfully'
