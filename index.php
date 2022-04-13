@@ -49,6 +49,11 @@ if (!isset($_SESSION["loggedIn"])) {
                 <a class="nav-link" href="#myAlert" data-toggle="collapse">Wow</a>
             </li>
         </ul>
+        <ul class="navbar-nav ">
+            <li class="nav-item">
+                <a class="nav-link" href="student.php">Student</a>
+            </li>
+        </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="logout.php">Log Out</a>

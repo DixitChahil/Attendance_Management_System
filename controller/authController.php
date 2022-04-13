@@ -1,18 +1,19 @@
 <?php
 require_once "database.php";
 session_start();
-
+echo 'fghgffg';
 // Check if email exists for signup
 if (isset($_GET['name']) && $_GET['name'] == 'check_exists_email') {
     $email = $_GET["email"];
+    echo $email;
     // Prepare a select statement
     $sql_query = "select * from users where email = '$email'";
     $result = mysqli_query($link, $sql_query);
 
     if (mysqli_num_rows($result) > 0) {
-        echo json_encode(false);
+        echo false;
     } else {
-        echo json_encode(true);
+        echo true;
     }
 }
 // Check if phone exists for signup
