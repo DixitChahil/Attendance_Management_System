@@ -29,6 +29,15 @@ if (mysqli_num_rows($result) > 0) {
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <link href="css/toastr.min.css" rel="stylesheet"/>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", "sans-serif";
+        }
+
         body {
             background-color: transparent;
             height: auto;
@@ -66,7 +75,9 @@ if (mysqli_num_rows($result) > 0) {
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Log Out</a>
+                <a class="nav-link" href="logout.php" onclick="return confirm('Are you sure, you want to logout?')">
+                    Log Out
+                </a>
             </li>
         </ul>
     </div>
@@ -415,42 +426,6 @@ if (mysqli_num_rows($result) > 0) {
             return false;
         }
         return true;
-    }
-
-    function chkemail(email) {
-        $.ajax({
-            type: "GET",
-            url: "controller/authController.php?name=check_exists_email",
-            data: 'email=' + encodeURI(email),
-            dataType: 'json',
-            success: function (data) {
-                if (!data) {
-                    $(".emailerror").removeClass('hide');
-                    return false;
-                } else {
-                    $(".emailerror").addClass('hide');
-                    return true;
-                }
-            }
-        });
-    }
-
-    function chkmobile(phone) {
-        $.ajax({
-            type: "GET",
-            url: "controller/authController.php?name=check_exists_mobile",
-            data: 'phone=' + phone,
-            dataType: 'json',
-            success: function (data) {
-                if (!data) {
-                    $(".mobileerror").removeClass('hide');
-                    return false;
-                } else {
-                    $(".mobileerror").addClass('hide');
-                    return true;
-                }
-            }
-        });
     }
 </script>
 </body>

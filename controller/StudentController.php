@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Check if email exists for signup
+// Check if student id exists for add student
 if (isset($_GET['name']) && $_GET['name'] == 'check_student_id') {
     $sid = $_POST["sid"];
     // Prepare a select statement
@@ -22,7 +22,7 @@ if (isset($_GET['name']) && $_GET['name'] == 'check_student_id') {
     }
 }
 
-// Signup User
+// Add Student To Teacher (If student is already registered then just add it to teacher student relation table)
 if ($_GET['name'] == 'signup') {
     $email = $_POST["email"];
     $name = $_POST["name"];
@@ -32,6 +32,7 @@ if ($_GET['name'] == 'signup') {
     $teacherId = $_SESSION['id'];
     $password = $_POST["password"];
     $hash = base64_encode($password);
+    // Flag passed from front to determine whether to add student to users table or not
     if ($_GET['student'] == 'false') {
         $query = "insert into users (name, subjectId, role, email, phone, password, studentId) 
             values('$name','$subjectId','s', '$email', '$phone', '$hash', '$studentId')";

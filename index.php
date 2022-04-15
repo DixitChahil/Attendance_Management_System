@@ -14,16 +14,40 @@ include_once 'controller/database.php';
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard</title>
-    <!--    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <link href="css/toastr.min.css" rel="stylesheet"/>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <script>
+        const role = '<?php echo $_SESSION['role']; ?>';
+        const base_url = '<?php echo $baseUrl; ?>';
+    </script>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", "sans-serif";
+        }
+
         .container {
             height: 80vh;
+        }
+
+        .submitAtt {
+            color: blue;
+        }
+
+        .submitAtt:hover {
+            cursor: pointer;
+        }
+
+        .dataTables_filter {
+            display: none;
         }
     </style>
 </head>
@@ -41,26 +65,26 @@ include_once 'controller/database.php';
         </button>
     </div>
     <div class="navbar-collapse collapse" id="collapsingNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="<?php echo $baseUrl; ?>index.php">Home <span class="sr-only">Home</span></a>
-            </li>
-            <?php if ($_SESSION['role'] == 't') { ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="student.php">Student</a>
+        <?php if ($_SESSION['role'] == 't') { ?>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="<?php echo $baseUrl; ?>index.php">Home <span
+                                class="sr-only">Home</span></a>
                 </li>
-            <?php } ?>
-        </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="student.php">Add Student</a>
+                </li>
+            </ul>
+        <?php } ?>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Log Out</a>
+                <a class="nav-link" href="logout.php" onclick="return confirm('Are you sure, you want to logout?')">
+                    Log Out
+                </a>
             </li>
         </ul>
     </div>
 </nav>
-<!--<div class="container align-content-center d-flex justify-content-center align-items-center">-->
-<!--    <b>Logged in Successfully.....</b>-->
-<!--</div>-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
@@ -97,14 +121,17 @@ include_once 'controller/database.php';
                         </div>
                     </div>
                     <div class="table-responsive path_report_print" id="table-responsive">
-                        <table class="table table-striped table-bordered" id="work-insights-tbl">
+                        <table class="table table-striped table-bordered text-center" id="work-insights-tbl">
                             <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Student Id</th>
-                                <th>Student Name</th>
-                                <th>Date</th>
-                                <th>Action</th>
+                                <th class="text-center">#</th>
+                                <?php if ($_SESSION['role'] == 't') { ?>
+                                    <th class="text-center">Student Id</th>
+                                    <th class="text-center">Student Name</th>
+                                <?php } ?>
+                                <th class="text-center">Subject Name</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Action</th>
                             </tr>
                             </thead>
                         </table>
@@ -122,23 +149,18 @@ include_once 'controller/database.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <script>
-    const base_url = 'http://localhost/finalProject/';
 
-    function render_patient_datatable() {
+    function render_datatable() {
         let table = $('#work-insights-tbl').DataTable({
             "processing": true,
             "serverSide": true,
             'lengthChange': false,
-            'info': false,
+            'info': true,
             'autoWidth': false,
+            'searching': true,
+            'pageLength': 10,
             'ordering': false,
-            'bPaginate': false,
-            "dom": '<"patient-filter float-left">frtip<"bottom">',
-            fnInitComplete: function () {
-                if ($(this).find('tbody tr').length < 1) {
-                    $('tfoot').hide();
-                }
-            },
+            'bPaginate': true,
             drawCallback: function (settings) {
                 if (Math.ceil((this.fnSettings().fnRecordsDisplay()) / this.fnSettings()._iDisplayLength) > 1) {
                     $('.dataTables_paginate').show();
@@ -146,7 +168,6 @@ include_once 'controller/database.php';
                     $('.dataTables_paginate').hide();
                 }
                 if ($(this).find('.dataTables_empty').length == 1) {
-                    $('tfoot').hide();
                     if ($(".dataTables_filter input").val() == '') {
                         $('.dataTables_filter').hide();
                     } else {
@@ -162,14 +183,14 @@ include_once 'controller/database.php';
             "bJQueryUI": true,
             "columns": [
                 {"data": "sr_no"},
+                <?php if ($_SESSION['role'] == 't') { ?>
                 {"data": "student_id"},
                 {"data": "student_name"},
+                <?php } ?>
+                {"data": "subject_name"},
                 {"data": "date"},
                 {"data": "action"},
             ],
-            columnDefs: [
-                {className: 'text-center', targets: [0]}
-            ]
         });
         return table;
     }
@@ -180,17 +201,19 @@ include_once 'controller/database.php';
 
         $("#start-date").bootstrapDP({
             autoclose: true,
-            todayHighlight: true
+            todayHighlight: true,
+            format: 'mm/dd/yyyy'
         });
 
         $("#end-date").bootstrapDP({
             autoclose: true,
-            todayHighlight: true
+            todayHighlight: true,
+            format: 'mm/dd/yyyy'
         });
 
-        table = render_patient_datatable();
+        let table = render_datatable();
 
-        $("body").on("focus", "#start-date", function () {
+        $(document).on("focus", "#start-date", function () {
             $(this).bootstrapDP({
                 autoclose: true,
                 todayHighlight: true,
@@ -204,7 +227,7 @@ include_once 'controller/database.php';
             });
         });
 
-        $("body").on("focus", "#end-date", function () {
+        $(document).on("focus", "#end-date", function () {
             $(this).bootstrapDP({
                 autoclose: true,
                 orientation: "bottom"
@@ -217,15 +240,37 @@ include_once 'controller/database.php';
             });
         });
 
-        $("body").on("click", "#filter-btn", function () {
+        $(document).on("click", "#filter-btn", function () {
             let start = $("#start-date").val();
             let end = $('#end-date').val();
             if (start !== '' || end !== '') {
                 let date = 'start=' + start + '|end=' + end;
+                console.log(date);
                 table.columns(3).search(date).draw();
             } else {
                 alert('Please select date');
             }
+        });
+
+        $(document).on("click", ".submitAtt", function () {
+            const subId = $(this).attr('data-subId');
+            const stId = $(this).attr('data-stId');
+            const type = $(this).attr('data-atType');
+            const tId = $(this).attr('data-tId');
+            $.ajax({
+                type: "POST",
+                url: "controller/tableController.php?name=submit_attendance",
+                data: 'subId=' + subId + '&stId=' + stId + '&type=' + type + '&tId=' + tId,
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        toastr.success(data.message);
+                        table.ajax.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
         });
     });
 </script>

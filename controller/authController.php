@@ -30,7 +30,7 @@ if (isset($_GET['name']) && $_GET['name'] == 'check_exists_mobile') {
     }
 }
 
-// Login Check
+// Check Whether Given Credentials for login is valid or invalid
 if ($_GET['name'] == 'login') {
     $email = $_POST["newEmail"];
     $password = $_POST["password"];
